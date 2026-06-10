@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, useInView, useReducedMotion } from 'framer-motion'
+import { motion, useInView, useReducedMotion } from 'motion/react'
 
 const EASE = [0.16, 1, 0.3, 1]
 
