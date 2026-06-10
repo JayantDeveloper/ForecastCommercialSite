@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useInView, useReducedMotion } from 'framer-motion'
+
+const EASE = [0.16, 1, 0.3, 1]
 
 const EVENTS = [
   { id: 0, x: '30%', y: '38%', title: 'CS Career Fair',       org: 'CS Department',   time: 'Today · 2PM · Iribe',   tag: 'Career',   tagColor: '#3B82F6' },
@@ -70,9 +72,21 @@ function EventPin({ event, isActive, isVisible }) {
 }
 
 export default function DemoSection() {
-  const [sectionRef, sectionVis] = useScrollReveal(0.2)
+  const sectionRef = useRef(null)
+  const sectionVis = useInView(sectionRef, { once: true, amount: 0.2 })
+  const reduce = useReducedMotion()
   const [activeIdx, setActiveIdx] = useState(0)
   const [visiblePins, setVisiblePins] = useState([])
+
+  // Drives the synced fade-up of the heading, phone, and copy blocks.
+  const revealProps = (delay = 0) =>
+    reduce
+      ? {}
+      : {
+          initial: { opacity: 0, y: 28 },
+          animate: { opacity: sectionVis ? 1 : 0, y: sectionVis ? 0 : 28 },
+          transition: { duration: 0.6, delay, ease: EASE },
+        }
 
   // Reveal pins one by one when section becomes visible
   useEffect(() => {
@@ -105,7 +119,7 @@ export default function DemoSection() {
     >
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
-        <div ref={sectionRef} className={`reveal ${sectionVis ? 'visible' : ''} text-center mb-16`}>
+        <motion.div ref={sectionRef} className="text-center mb-16" {...revealProps()}>
           <p className="text-xs font-semibold tracking-widest uppercase text-forecast-sky mb-3">
             See it in action
           </p>
@@ -117,11 +131,12 @@ export default function DemoSection() {
             <br />
             Nothing missed.
           </h2>
-        </div>
+        </motion.div>
 
         <div className="flex flex-col lg:flex-row items-center justify-center gap-16">
           {/* Phone mockup */}
-          <div className={`reveal ${sectionVis ? 'visible' : ''} phone-float`} style={{ flexShrink: 0 }}>
+          <motion.div style={{ flexShrink: 0 }} {...revealProps(0.1)}>
+           <div className="phone-float">
             <div
               style={{
                 width: 270,
@@ -241,7 +256,8 @@ export default function DemoSection() {
                 <div className="w-20 h-1 rounded-full bg-white/10" />
               </div>
             </div>
-          </div>
+           </div>
+          </motion.div>
 
           {/* Right side copy */}
           <div className="max-w-sm">
@@ -265,11 +281,11 @@ export default function DemoSection() {
                   desc: 'AI filters the noise. You only hear about what actually matches your interests and schedule.',
                   delay: '0.2s',
                 },
-              ].map(({ icon, title, desc, delay }, i) => (
-                <div
+              ].map(({ icon, title, desc }, i) => (
+                <motion.div
                   key={i}
-                  className={`reveal reveal-delay-${i + 1} ${sectionVis ? 'visible' : ''} flex gap-4`}
-                  style={{ transitionDelay: delay }}
+                  className="flex gap-4"
+                  {...revealProps(0.15 + i * 0.1)}
                 >
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
@@ -286,7 +302,7 @@ export default function DemoSection() {
                     </div>
                     <p className="text-slate-400 text-[15px] leading-relaxed">{desc}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

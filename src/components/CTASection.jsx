@@ -1,9 +1,7 @@
-import { useScrollReveal } from '../hooks/useScrollReveal'
 import { Link } from 'react-router-dom'
+import Reveal from './Reveal'
 
 export default function CTASection() {
-  const [ref, visible] = useScrollReveal()
-
   return (
     <section
       className="py-28 px-6 relative overflow-hidden"
@@ -20,7 +18,7 @@ export default function CTASection() {
         }}
       />
 
-      <div ref={ref} className={`reveal ${visible ? 'visible' : ''} relative z-10 max-w-2xl mx-auto text-center`}>
+      <Reveal className="relative z-10 max-w-2xl mx-auto text-center">
         <h2
           className="text-4xl md:text-5xl font-display font-bold text-white leading-tight mb-5"
           style={{ fontFamily: 'Cabinet Grotesk, sans-serif' }}
@@ -55,7 +53,7 @@ export default function CTASection() {
         <p className="text-slate-600 text-xs mt-8">
           Available on iOS & Android via Expo · Open source
         </p>
-      </div>
+      </Reveal>
     </section>
   )
 }

@@ -1,4 +1,4 @@
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import Reveal from './Reveal'
 
 const features = [
   {
@@ -49,14 +49,11 @@ const features = [
 ]
 
 export default function FeaturesSection() {
-  const [headRef, headVis] = useScrollReveal()
-  const [gridRef, gridVis] = useScrollReveal()
-
   return (
     <section style={{ background: '#080F1E' }} className="py-28 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
-        <div ref={headRef} className={`reveal ${headVis ? 'visible' : ''} text-center mb-16`}>
+        <Reveal className="text-center mb-16">
           <p className="text-xs font-semibold tracking-widest uppercase text-forecast-sky mb-3">
             How it works
           </p>
@@ -68,14 +65,17 @@ export default function FeaturesSection() {
             <br />
             actually live
           </h2>
-        </div>
+        </Reveal>
 
         {/* Feature cards */}
-        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {features.map(({ icon, title, desc }, i) => (
-            <div
+            <Reveal
               key={i}
-              className={`reveal reveal-delay-${i + 1} ${gridVis ? 'visible' : ''} gradient-border rounded-2xl p-6 transition-all duration-300 hover:border-forecast-sky/30 hover:-translate-y-1`}
+              delay={i * 0.08}
+              amount={0.25}
+              whileHover={{ y: -4 }}
+              className="gradient-border rounded-2xl p-6 hover:border-forecast-sky/30"
             >
               <div
                 className="w-11 h-11 rounded-xl flex items-center justify-center mb-5"
@@ -90,7 +90,7 @@ export default function FeaturesSection() {
                 {title}
               </h3>
               <p className="text-slate-400 text-sm leading-relaxed">{desc}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

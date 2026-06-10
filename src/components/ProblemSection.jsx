@@ -1,4 +1,4 @@
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import Reveal from './Reveal'
 
 const sources = [
   { label: 'Scholarship Deadline',  tag: 'Email',     color: '#3B82F6', rotate: '-2deg',  delay: 0 },
@@ -10,14 +10,11 @@ const sources = [
 ]
 
 export default function ProblemSection() {
-  const [headRef, headVis] = useScrollReveal()
-  const [bodyRef, bodyVis] = useScrollReveal()
-
   return (
     <section className="bg-forecast-surface py-28 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
-        <div ref={headRef} className={`reveal ${headVis ? 'visible' : ''} mb-20 text-center`}>
+        <Reveal className="mb-20 text-center">
           <p className="text-xs font-semibold tracking-widest uppercase text-forecast-blue mb-3">
             The problem
           </p>
@@ -33,22 +30,19 @@ export default function ProblemSection() {
             Campus life is fragmented across a dozen channels. Most students see maybe a fraction
             of what's actually available to them.
           </p>
-        </div>
+        </Reveal>
 
         {/* Source cards + arrow + solution */}
-        <div ref={bodyRef} className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
           {/* Left: chaos */}
           <div className="flex-1">
             <p className="text-forecast-muted text-sm font-medium mb-6 tracking-wide uppercase">
               Opportunities scattered across
             </p>
             <div className="grid grid-cols-2 gap-3">
-              {sources.map(({ label, tag, color, rotate, delay }, i) => (
+              {sources.map(({ label, tag, color, rotate }, i) => (
                 <div key={i} style={{ transform: `rotate(${rotate})` }}>
-                  <div
-                    className={`card-bounce ${bodyVis ? 'visible' : ''}`}
-                    style={{ animationDelay: `${delay}s` }}
-                  >
+                  <Reveal delay={i * 0.06} y={24} amount={0.4}>
                     <div
                       className="bg-white rounded-xl px-4 py-3 border border-slate-100"
                       style={{
@@ -61,7 +55,7 @@ export default function ProblemSection() {
                       </span>
                       <p className="text-forecast-slate text-sm font-medium mt-0.5 leading-snug">{label}</p>
                     </div>
-                  </div>
+                  </Reveal>
                 </div>
               ))}
             </div>
